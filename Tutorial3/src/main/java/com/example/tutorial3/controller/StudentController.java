@@ -1,9 +1,11 @@
 package com.example.tutorial3.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import com.example.tutorial3.service.InMemoryStudentService;
@@ -41,5 +43,28 @@ public class StudentController {
 		List<StudentModel> students = studentService.selectAllStudents();
 		model.addAttribute("students", students);
 		return "viewall";
+	}
+	
+	@RequestMapping("/student/view/{npm}")
+	public String viewStudent(@PathVariable Optional<String> npm, Model model) {
+		StudentModel student = studentService.selectStudent(npm.get());
+		model.addAttribute("student", student);
+		if(student != null) {
+			return "view";
+		} else {
+			return "notfound";
+		}
+	}
+	
+	@RequestMapping("/student/delete/{npm}")
+	public String deleteStudent(@PathVariable Optional<String> npm, Model model) {
+		StudentModel student = studentService.selectStudent(npm.get());
+		if(student != null) {
+			List<StudentModel> arrayOfStudent = studentService.selectAllStudents();
+			arrayOfStudent.remove(student);
+			return "delete";
+		} else {
+			return "deleteCanceled";
+		}
 	}
 }

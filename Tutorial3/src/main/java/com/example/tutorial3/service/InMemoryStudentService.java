@@ -9,7 +9,13 @@ public class InMemoryStudentService implements StudentService {
 	
 	@Override
 	public StudentModel selectStudent(String npm) {
-		//implement
+		//Implement
+		for(int a=0; a<studentList.size(); a++) {
+			StudentModel student = studentList.get(a);
+			if(student.getNpm().equals(npm)) {
+				return student;
+			}
+		}
 		return null;
 	}
 
